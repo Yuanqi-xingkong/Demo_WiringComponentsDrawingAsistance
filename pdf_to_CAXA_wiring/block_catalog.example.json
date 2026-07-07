@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "layout_rules": {
+    "units": "mm",
+    "left_connector_x": 0,
+    "right_connector_x": 300,
+    "connector_y": 0,
+    "connector_width": 40,
+    "port_pitch": 16,
+    "wire_standard_length": 100,
+    "covering_standard_length": 100,
+    "covering_start_ratio": 0.16,
+    "covering_end_ratio": 0.84,
+    "dimension_offset_y": -28,
+    "dimension_tick_height": 6,
+    "dimension_text_height": 5,
+    "default_dimension_chain_mm": [45, 52, 15, 126, 105, 100, 45],
+    "above_offset": 12,
+    "below_offset": -12
+  },
+  "blocks": {
+    "__DEFAULT_WIRE__": {
+      "block_name": "WIRE",
+      "standard_length": 100,
+      "description": "默认导线图块；当 PDF/semantic.json 中导线没有 material_no 时使用"
+    },
+    "__DEFAULT_CORRUGATED_TUBE__": {
+      "block_name": "CORRUGATED_TUBE",
+      "standard_length": 100,
+      "description": "默认波纹管图块；当 semantic.json 中波纹管没有 material_no 时使用"
+    },
+    "T60SOSSFT712S-E1": {
+      "block_name": "T60SOSSFT712S-E1",
+      "width": 8,
+      "height": 16,
+      "rotation_offset_deg": 0,
+      "description": "semantic_3.json 中识别到的物料号"
+    },
+    "118-0221-0048": {
+      "block_name": "118-0221-0048",
+      "width": 40,
+      "height": 32,
+      "rotation_deg": 0
+    },
+    "2361027-1": {
+      "block_name": "2361027-1",
+      "width": 40,
+      "height": 32,
+      "rotation_deg": 0
+    },
+    "T50SVCOC19-24.5": {
+      "block_name": "T60SOSSFT712S-E1",
+      "width": 8,
+      "height": 16,
+      "rotation_offset_deg": 0
+    },
+    "T60SOSST712S-E1": {
+      "block_name": "T50SVCOC15-18",
+      "width": 8,
+      "height": 16,
+      "rotation_offset_deg": 0
+    },
+    "T50SVCOC15-18": {
+      "block_name": "T50SVCOC19-24.5",
+      "width": 8,
+      "height": 16,
+      "rotation_offset_deg": 0
+    },
+    "label": {
+      "block_name": "label",
+      "width": 8,
+      "height": 16,
+      "rotation_offset_deg": 0
+    }
+  }
+}
