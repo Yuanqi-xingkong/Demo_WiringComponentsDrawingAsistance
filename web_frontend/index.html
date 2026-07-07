@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>中航光电线束物料自动生成</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="toolbar">
+      <div>
+        <h1>线缆组件接线表生成</h1>
+        <p>图纸识别、物料匹配、模板回填</p>
+      </div>
+      <div class="service-state" id="serviceState">服务检查中</div>
+    </section>
+
+    <section class="workspace">
+      <div class="left-stack">
+        <section class="upload-panel">
+          <div class="panel-heading">
+            <h2>治理知识库</h2>
+            <p>选择运行时知识库</p>
+          </div>
+          <label class="field-label" for="knowledgeSelect">运行时治理文件</label>
+          <select id="knowledgeSelect" class="select-input"></select>
+          <label class="compact-drop" for="knowledgeFile">
+            <span id="knowledgeMeta">上传新的 .xlsx 治理文件</span>
+            <input id="knowledgeFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+          </label>
+          <button class="secondary-button" id="uploadKnowledgeButton" type="button">上传并使用</button>
+        </section>
+
+        <form id="uploadForm" class="upload-panel">
+          <div class="panel-heading">
+            <h2>上传文件</h2>
+            <p>PDF 图纸 / DOCX 技术要求</p>
+          </div>
+          <label class="drop-zone" for="drawingFile">
+            <span class="drop-title">选择或拖入图纸/技术要求文件</span>
+            <span class="drop-meta" id="fileMeta">未选择文件</span>
+            <input id="drawingFile" name="file" type="file" accept="application/pdf,.pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+          </label>
+          <label class="switch-row">
+            <input id="useLlm" type="checkbox">
+            <span>使用 LLM 辅助抽取图纸需求</span>
+          </label>
+          <button class="primary-button" id="submitButton" type="submit">开始生成</button>
+        </form>
+      </div>
+
+      <div class="right-stack">
+        <section class="status-panel">
+          <div class="status-header">
+            <div>
+              <h2>任务状态</h2>
+              <p id="stage">-</p>
+            </div>
+            <span id="jobBadge" class="badge">未开始</span>
+          </div>
+          <div class="progress-track">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <ol class="stage-list" id="stageList">
+            <li data-step="read">读取</li>
+            <li data-step="parse">解析</li>
+            <li data-step="extract">抽取</li>
+            <li data-step="match">匹配</li>
+            <li data-step="fill">回填</li>
+          </ol>
+          <dl class="status-grid status-grid-main">
+            <div>
+              <dt>任务 ID</dt>
+              <dd id="jobId">-</dd>
+            </div>
+            <div>
+              <dt>治理文件</dt>
+              <dd id="knowledgeFileName">-</dd>
+            </div>
+            <div>
+              <dt>接线行数</dt>
+              <dd id="connectionRows">-</dd>
+            </div>
+            <div>
+              <dt>辅材条数</dt>
+              <dd id="sheetMaterials">-</dd>
+            </div>
+          </dl>
+          <div id="errorBox" class="error-box" hidden></div>
+        </section>
+
+        <section class="result-panel">
+          <div class="status-header">
+            <h2>结果文件</h2>
+            <span class="hint">完成后可下载</span>
+          </div>
+          <div id="downloads" class="download-list"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
