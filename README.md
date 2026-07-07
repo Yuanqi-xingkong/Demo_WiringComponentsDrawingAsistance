@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/3e51090d-53e9-4ee6-9a9a-02f03abbc51c
+
 # 中航光电线束物料推荐、接线表以及对应CAXA绘图服务
 本项目面向线束制造场景，提供从客户 PDF 图纸到内部接线表、物料清单和 CAXA 装配示意图的自动化转换能力，帮助生产人员快速、准确地理解装配方法。
 ## 背景与动机
@@ -172,7 +176,14 @@ AutoDrawWiring
 
 https://github.com/user-attachments/assets/f7aa779c-62fd-4470-a38e-b21ad03a411b
 
+## 阶段二示例
 
+
+https://github.com/user-attachments/assets/2b7c44a6-3c9c-43ab-a011-1b217d142a97
 
 示例中所用到的图纸样本：
 [用户提供图纸1.pdf](https://github.com/user-attachments/files/29748137/1.pdf)
+
+
+
+
