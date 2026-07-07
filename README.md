@@ -19,6 +19,11 @@
 3. 后端抽取图纸需求，可选择启用 LLM 辅助抽取。
 4. 后端读取运行时治理知识库 `.xlsx`，匹配连接器、导线、防护辅材、扎带卡扣等物料。
 5. 后端复制接线表模板，只保留模板格式，回填 `接线表` 和 `连接器及其所用辅材`，生成新 Excel。
+### 阶段二
+1. 上传阶段一生成的`接线表` 和 `连接器及其所用辅材`,以及PDF图纸给多模态大模型，理解绘制意图。
+2. 大模型将提取到的物料信息已经模块的位置信息填入到semantic.json中，在json中用户可以检验大模型提取信息完整性和物料位置准确性。
+3. 通过规则算法将semantic.json转为确定性布局的layout.json，便于后期定位到故障点。
+4. layout.json转为.cpp，CAXA绘图宏命令，经过vs2010编译后导入CAXA软件，实现一键绘制。
 
 ## GitHub 副本包含
 ### 阶段一：
@@ -61,6 +66,106 @@ export JONHON_WEB_PORT=18052
 export JONHON_OCR_URL=http://127.0.0.1:8030/ocr
 export JONHON_WEB_LLM_MODEL=qwen3.6-max-preview
 ```
+### 阶段二：
+
+```text
+pdf_to_caxa_wiring/
+├─ extract_pdf_pages.py             # PDF 转 PNG 页面
+├─ recognize_wiring_semantics.py    # 调用阿里百炼识别接线语义
+├─ generate_layout.py               # semantic.json 转 layout.json
+├─ generate_caxa_cpp.py             # layout.json 转 CAXA C++ 宏代码
+├─ block_catalog.example.json       # CAXA 图块名称、尺寸、布局规则示例
+└─ output/                          # 中间结果和生成代码
+```
+
+#### 输入输出
+
+主要输入：
+
+- PDF 图纸
+- CAXA 中已导入的图块
+- `block_catalog.example.json` 中的图块映射与布局规则
+
+主要输出：
+
+- `semantic.json`：大模型识别出的连接器、导线、波纹管、辅材、尺寸标注等语义信息
+- `layout.json`：CAD 示意图实体布局，包含插入点、缩放、绘制顺序和尺寸线位置
+- `AutoDrawWiring.cpp`：可复制到 CAXA ObjectCRX 工程中的 C++ 绘图代码
+
+## 使用方法
+
+
+### 1. 渲染 PDF
+
+```powershell
+python .\pdf_to_caxa_wiring\extract_pdf_pages.py ".\用户提供图纸1.pdf" -o ".\pdf_to_caxa_wiring\output\pages" --dpi 200
+```
+
+输出：
+
+```text
+pdf_to_caxa_wiring/output/pages/manifest.json
+pdf_to_caxa_wiring/output/pages/page_0001.png
+```
+
+### 2. 调用阿里百炼识别语义
+
+先设置 API Key：
+
+```powershell
+$env:DASHSCOPE_API_KEY="你的阿里百炼API Key"
+```
+
+再运行：
+
+```powershell
+python .\pdf_to_caxa_wiring\recognize_wiring_semantics.py ".\pdf_to_caxa_wiring\output\pages\manifest.json" -o ".\pdf_to_caxa_wiring\output\semantic.json"
+```
+
+### 3. 生成 CAD 布局
+
+```powershell
+python .\pdf_to_caxa_wiring\generate_layout.py ".\pdf_to_caxa_wiring\output\semantic.json" -o ".\pdf_to_caxa_wiring\output\layout.json" --catalog ".\pdf_to_caxa_wiring\block_catalog.example.json"
+```
+
+### 4. 生成 CAXA C++ 宏代码
+
+```powershell
+python .\pdf_to_caxa_wiring\generate_caxa_cpp.py ".\pdf_to_caxa_wiring\output\layout.json" -o ".\pdf_to_caxa_wiring\output\AutoDrawWiring.cpp"
+```
+
+如果 layout 仍是草稿状态，可联调用：
+
+```powershell
+python .\pdf_to_caxa_wiring\generate_caxa_cpp.py ".\pdf_to_caxa_wiring\output\layout.json" -o ".\pdf_to_caxa_wiring\output\AutoDrawWiring.cpp" --allow-draft
+```
+
+## CAXA 使用说明
+
+1. 确保 CAXA 当前图纸已导入所需图块，例如：
+   - `WIRE`
+   - `CORRUGATED_TUBE`
+   - 连接器块
+   - 扎带、端子、标签等辅材块
+2. 将生成的 `AutoDrawWiring.cpp` 中代码合并到 ObjectCRX 工程的 `CrxEntryPoint.cpp`。
+3. 在 `On_kInitAppMsg` 中注册命令：
+
+```cpp
+crxedRegCmds->addCommand(
+    _T("HelloApp"),
+    _T("GAutoDrawWiring"),
+    _T("AutoDrawWiring"),
+    ACRX_CMD_MODAL,
+    &cmdAutoDrawWiring
+);
+```
+
+4. 编译、加载 CRX 后，在 CAXA 命令行执行：
+
+```text
+AutoDrawWiring
+```
+
 
 ## 阶段一示例
 
