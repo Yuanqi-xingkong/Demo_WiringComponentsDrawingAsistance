@@ -50,3 +50,13 @@ export JONHON_WEB_PORT=18052
 export JONHON_OCR_URL=http://127.0.0.1:8030/ocr
 export JONHON_WEB_LLM_MODEL=qwen3.6-max-preview
 ```
+
+## 示例
+
+
+https://github.com/user-attachments/assets/f7aa779c-62fd-4470-a38e-b21ad03a411b
+
+
+
+示例中所用到的图纸样本：
+[用户提供图纸1.pdf](https://github.com/user-attachments/files/29748137/1.pdf)
