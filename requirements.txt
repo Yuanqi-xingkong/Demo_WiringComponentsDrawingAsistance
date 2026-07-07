@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+requests
+openpyxl
+pandas
+lxml
+html5lib
+beautifulsoup4

@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 运行输出和用户上传内容
+治理输出/
+
+# 建议不要提交受控/客户资料；按 data/README.md 在部署环境中放置
+*.pdf
+*.docx
+*.xls
+*.xlsx
+
+# 但保留示例环境文件
+!.env.example
